@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   minWidth="955" minHeight="600"
+			   creationComplete="onCreationComplete()" xmlns:adobe="http://www.adobe.com/2009/flexUnitUIRunner">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.sunild.collections.test.pagedArrayCollection.PagedArrayCollectionTest;
+			import com.sunild.collections.test.vectorList.VectorListTest;
+			
+			import org.flexunit.listeners.UIListener;
+			import org.flexunit.runner.FlexUnitCore;
+			
+			private function onCreationComplete():void
+			{
+				var core:FlexUnitCore = new FlexUnitCore();
+				core.addListener( new UIListener(uiListener) );
+//				core.run( PagedArrayCollectionTest, VectorListTest );
+				core.run( VectorListTest );
+			}
+		]]>
+	</fx:Script>
+	
+	<adobe:TestRunnerBase id="uiListener" width="100%" height="100%" />
+</s:Application>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   minWidth="400" minHeight="400"
+			   width="400" height="400"
+			   creationComplete="onCreationComplete()">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.sunild.collections.PagedArrayCollection;
+			import com.sunild.collections.demo.model.ColorVO;
+			import com.sunild.collections.demo.view.renderers.ColorRenderer;
+			
+			import mx.utils.HSBColor;
+			
+			[Bindable]
+			private var collection:PagedArrayCollection;
+			
+			private function onCreationComplete():void
+			{
+				createColorData(1000);
+				listbert.dataProvider = collection;
+			}
+			
+			private function createColorData(numColors:int = 500):void
+			{
+				var tmp:Array = [];
+				
+				// angle that will vary from 0 to 360 to generate HSB colors
+				var hue:Number = 0;
+				// amount to vary the angle on each iteration
+				var shift:Number = 360/numColors;
+				
+				for (var i:int = 0; i<numColors; i++)
+				{
+					tmp.push( new ColorVO(
+						HSBColor.convertHSBtoRGB(hue, .75, .9) ) );
+					hue += shift;
+				}
+				
+				collection = new PagedArrayCollection(tmp);
+				collection.pageSize = 200;
+			}
+			
+			/**
+			 * Move the collection's current page forwards/backwards.
+			 * @param direction Advance one page if true (default),
+			 *    backwards if false.
+			 */	
+			private function changePage(direction:Boolean = true):void
+			{
+				var p:int = collection.currentPage;
+				p = p + ( direction ? 1 : -1 );
+				if (p > 0 && p <= collection.numberOfPages)
+					collection.currentPage = p;
+			}
+		]]>
+	</fx:Script>
+	
+	<s:layout>
+		<s:VerticalLayout gap="0"/>
+	</s:layout>
+	
+	<s:List id="listbert"
+			width="400" height="200"
+			borderVisible="false"
+			contentBackgroundColor="#CDCDCD" contentBackgroundAlpha=".75"
+			itemRenderer="com.sunild.collections.demo.view.renderers.ColorRenderer">
+		<s:layout>
+			<s:TileLayout columnWidth="20" rowHeight="20" verticalGap="0" horizontalGap="0" />
+		</s:layout>
+	</s:List>
+	
+	<s:Group width="400" height="100">
+		<s:Rect top="0" bottom="0" left="0" right="0">
+			<s:fill>
+				<s:SolidColor color="#000000"/>
+			</s:fill>
+		</s:Rect>
+		<s:VGroup top="0" bottom="0" left="0" right="0"
+				  paddingTop="5" paddingLeft="3"
+				  color="#00FF00">
+			<s:Label text="{'Collection Size: ' + collection.lengthTotal}" />
+			<s:Label text="{'Page Size: ' + collection.pageSize}"/>
+			<s:Label text="{'Num Pages: ' + collection.numberOfPages}" />
+			<s:Label text="{'Current Page: ' + collection.currentPage}" />
+		</s:VGroup>
+	</s:Group>
+	
+	
+	<s:controlBarContent>
+		<s:VGroup width="100%">
+			<s:HGroup width="100%">
+				<s:CheckBox id="paginationCheckbox"
+							selected="true"
+							label="enable pagination"
+							change="collection.enablePagination = paginationCheckbox.selected;"/>
+				
+				<mx:Spacer width="100%" />
+				
+				<s:Button label="Previous Page" click="changePage(false);" />
+				<s:Button label="Next Page" click="changePage(true);"/>
+			</s:HGroup>
+			
+			<s:HGroup width="100%">
+				<s:Label text="page size:"/>
+				<s:HSlider id="pageSizeSlider"
+						   minimum="1" maximum="500" value="200"
+						   change="collection.pageSize = pageSizeSlider.value;"/>
+				
+			</s:HGroup>
+		</s:VGroup>
+	</s:controlBarContent>
+	
+</s:Application>
