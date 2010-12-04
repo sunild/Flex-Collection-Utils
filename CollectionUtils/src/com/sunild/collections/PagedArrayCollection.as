@@ -168,6 +168,11 @@ package com.sunild.collections
 			return removedItem;
 		}
 		
+		/**
+		 * Collection change handler. 
+		 * @param event
+		 * 
+		 */		
 		protected function onChange(event:CollectionEvent):void
 		{
 			if( _numberOfPages != numberOfPages )
@@ -183,11 +188,16 @@ package com.sunild.collections
 		}
 		
 		[ChangeEvent("collectionChange")]
+		/**
+		 * @inheritDoc 
+		 */		
 		public function get currentPage():int
 		{
 			return _currentPage;
 		}
-		
+		/**
+		 * @private 
+		 */		
 		public function set currentPage(value:int):void
 		{   _currentPage = value;
 			refresh();
@@ -195,6 +205,9 @@ package com.sunild.collections
 		}
 		
 		[ChangeEvent("collectionChange")]
+		/**
+		 * @inheritDoc 
+		 */		
 		public function get numberOfPages():int
 		{
 			var result:Number = source.length / pageSize;
@@ -203,11 +216,17 @@ package com.sunild.collections
 		}
 		
 		[ChangeEvent("collectionChange")]
+		/**
+		 * @inheritDoc 
+		 */		
 		public function get pageSize():int
 		{
 			return _pageSize;
 		}
 		
+		/**
+		 * @private 
+		 */		
 		public function set pageSize(value:int):void
 		{
 			_pageSize = value;
@@ -216,11 +235,18 @@ package com.sunild.collections
 		}
 		
 		[ChangeEvent("collectionChange")]
+		/**
+		 * @inheritDoc 
+		 */		
 		public function get lengthTotal():int
 		{
 			return source.length;
 		}
 		
+		/**
+		 * The filter function that paginates the data. 
+		 * @private
+		 */		
 		private function filterData(item:Object):Boolean
 		{
 			var dataWindowCeiling:int = pageSize * currentPage;

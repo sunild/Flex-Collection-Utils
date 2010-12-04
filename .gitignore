@@ -1,0 +1,5 @@
+CollectionUtils/bin/*
+CollectionUtilsTest/bin-release/*
+CollectionUtilsTest/bin-debug/*
+CollectionUtilsTest/html-template/*
+.DS_Store
