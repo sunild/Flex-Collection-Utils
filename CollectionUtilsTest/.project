@@ -3,6 +3,7 @@
 	<name>CollectionUtilsTest</name>
 	<comment></comment>
 	<projects>
+		<project>CollectionUtils</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
