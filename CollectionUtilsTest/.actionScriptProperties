@@ -16,6 +16,7 @@
   <applications>
     <application path="CollectionUtilsTest.mxml"/>
     <application path="PagedArrayCollectionDemo.mxml"/>
+    <application path="VectorListDemo.mxml"/>
   </applications>
   <modules/>
   <buildCSSFiles/>

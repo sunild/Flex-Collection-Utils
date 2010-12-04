@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   minWidth="955" minHeight="600"
+			   creationComplete="onCreationComplete()">
+	<fx:Script>
+		<![CDATA[
+			import com.sunild.collections.demo.view.renderers.ColorRenderer;
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.sunild.collections.VectorList;
+			import com.sunild.collections.demo.model.ColorVO;
+			
+			import mx.utils.HSBColor;
+			
+			private var stringList:VectorList;
+			private var colorList:VectorList;
+			
+			private function onCreationComplete():void
+			{
+				stringList = new VectorList();
+				stringList.vector = createStringVector(100);
+				stringList.type = Vector.<String> as Class;
+				
+				colorList = new VectorList(createColorVoVector(500), Vector.<ColorVO> as Class);
+				theList.dataProvider = colorList;
+			}
+			
+			private function createColorVoVector(size:int):Vector.<ColorVO>
+			{
+				var v:Vector.<ColorVO> = new Vector.<ColorVO>;
+				var hue:Number = 0;
+				var shift:Number = 360/size;
+				
+				for (var i:int = 0; i<size; i++)
+				{
+					var vo:ColorVO = new ColorVO(
+						HSBColor.convertHSBtoRGB(hue, 1, 1) );
+					hue += shift;
+					v.push(vo);
+				}
+				return v;
+			}
+			
+			private function createStringVector(size:int):Vector.<String>
+			{
+				var v:Vector.<String> = new Vector.<String>;
+				for (var i:int = 0; i<size; i++)
+				{
+					v.push( "I'm a string! " + i.toString(16) );
+				}
+				return v;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:List id="theList"
+			width="372" height="400"
+			itemRenderer="com.sunild.collections.demo.view.renderers.ColorRenderer">
+		<s:layout>
+			<s:TileLayout rowHeight="50" columnWidth="50" horizontalGap="1" verticalGap="1" />
+			<!--<s:VerticalLayout rowHeight="15" />-->
+		</s:layout>
+	</s:List>
+	
+</s:Application>

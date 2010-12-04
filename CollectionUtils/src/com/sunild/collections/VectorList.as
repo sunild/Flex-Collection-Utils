@@ -35,8 +35,16 @@ package com.sunild.collections
 		 */		
 		public var type:Class;
 		
-		public function VectorList()
+		/**
+		 * Constructor.
+		 * @param vector the source vector
+		 * @param type the type of vector, cast to a Class
+		 * 
+		 */		
+		public function VectorList(vector:Object = null, type:Class = null)
 		{
+			this.vector = vector;
+			this.type = type;
 		}
 		
 		public function get length():int
