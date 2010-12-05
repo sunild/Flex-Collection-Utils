@@ -2,9 +2,13 @@ package com.sunild.collections.test.vectorList
 {
 	import com.sunild.collections.VectorList;
 	
+	import mx.events.CollectionEvent;
+	import mx.events.CollectionEventKind;
+	
 	import org.flexunit.asserts.assertEquals;
 	import org.flexunit.asserts.assertFalse;
 	import org.flexunit.asserts.assertTrue;
+	import org.flexunit.async.Async;
 
 	/**
 	 * Blah. 
@@ -50,6 +54,18 @@ package com.sunild.collections.test.vectorList
 			assertStringsMatch(s,0);
 		}
 		
+		[Test(async, description="verify CollectionChange event from addItem")]
+		public function addItemCollectionChange():void
+		{
+			var s:String = "new string";
+			var passThruData:Object = createPassThruObject("add", [s], 10);
+			
+			populateStringVector(vic,10);
+			Async.handleEvent(this, list, CollectionEvent.COLLECTION_CHANGE,
+				handleCollectionChange, 500, passThruData);
+			list.addItem(s);
+		}
+		
 		[Test]
 		public function testAddItemAt():void
 		{
@@ -67,7 +83,18 @@ package com.sunild.collections.test.vectorList
 			// there are 202 elements in the VectorList
 			assertStringsMatch("199",201);
 		}
-
+		
+		[Test(async, description="verify CollectionChange event from addItemAt")]
+		public function addItemAtCollectionChange():void
+		{
+			populateStringVector(vic,100);
+			var s:String = "this is a string";
+			var passThruData:Object = createPassThruObject("add", [s], 10);
+			Async.handleEvent(this, list, CollectionEvent.COLLECTION_CHANGE,
+				handleCollectionChange, 500, passThruData);
+			list.addItemAt(s,10);
+		}
+		
 		[Test]
 		public function testLength():void
 		{
@@ -104,6 +131,19 @@ package com.sunild.collections.test.vectorList
 			assertSize(0);
 		}
 		
+		[Test (async, description="verify CollectionEvent after removeAll()")]
+		public function removeAllCollectionChange():void
+		{
+			populateStringVector(vic,200);
+			assertSize(200);
+			var passThruData:Object = createPassThruObject(
+				CollectionEventKind.RESET, []);
+			Async.handleEvent(this, list, CollectionEvent.COLLECTION_CHANGE,
+				handleCollectionChange, 500, passThruData);
+			list.removeAll();
+			assertSize(0);
+		}
+		
 		[Test]
 		public function testRemoveItemAt():void
 		{
@@ -117,6 +157,18 @@ package com.sunild.collections.test.vectorList
 			
 			assertTrue("internal vector should not contain the removed item",
 				vic.indexOf("25") == -1);
+		}
+		
+		[Test(async, description="verify CollectionEvent after removeItemAt()")]
+		public function removeItemAtCollectionChange():void
+		{
+			populateStringVector(vic,200);
+			assertSize(200);
+			var passThruData:Object = createPassThruObject(
+				CollectionEventKind.REMOVE, [ list.getItemAt(0) ], 0);
+			Async.handleEvent(this, list, CollectionEvent.COLLECTION_CHANGE,
+				handleCollectionChange, 500, passThruData);
+			list.removeItemAt(0);
 		}
 		
 		[Test]
@@ -158,6 +210,8 @@ package com.sunild.collections.test.vectorList
 			assertEquals("length should be 10001",size+1, vic.length);
 		}
 		
+		/* Utlility methods */
+		
 		private function populateStringVector(v:Vector.<String>, size:int):void
 		{
 			for (var i:int = 0; i<size; i++)
@@ -188,6 +242,38 @@ package com.sunild.collections.test.vectorList
 			assertEquals("list.length should be " + size, size, list.length);
 			assertEquals("internal vector.length should be " + size, size,
 				vic.length);
+		}
+		
+		private function createPassThruObject(kind:String, items:Array, location:int = -1, oldLocation:int = -1):Object
+		{
+			return { kind: kind, items: items, location: location, oldLocation: oldLocation };
+		}
+		
+		private function handleCollectionChange(event:CollectionEvent, passThruData:Object):void
+		{
+			var kind:String = passThruData["kind"];
+			var location:int = passThruData["location"];
+			var oldLocation:int = passThruData["oldLocation"];
+			var items:Array = passThruData["items"];
+			
+			assertEquals("event.kind should match", kind, event.kind);
+			assertEquals("event.location should match", location,
+				event.location);
+			assertEquals("event.oldLoation should match", oldLocation,
+				event.oldLocation);
+			
+			compareItemArrays(items, event.items);
+			
+		}
+		
+		private function compareItemArrays(orig:Array, test:Array):void
+		{
+			var l:int = orig.length;
+			for (var i:int = 0; i<l; i++)
+			{
+				assertTrue("items should be the same reference",
+					orig[i] === test[i] );
+			}
 		}
 	}
 }

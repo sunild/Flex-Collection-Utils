@@ -59,8 +59,38 @@
 				return v;
 			}
 			
+			private function addItem():void
+			{
+				colorList.addItem( genRandomColor() );
+			}
+			
+			private function addItemAt(index:int):void
+			{
+				colorList.addItemAt( genRandomColor(), index);
+			}
+			
+			private function removeItemAt(index:int):void
+			{
+				colorList.removeItemAt(index);
+			}
+			
+			private function removeAll():void
+			{
+				colorList.removeAll();
+			}
+			
+			private function genRandomColor():ColorVO
+			{
+				var random:Number = Math.random() * 360;
+				return new ColorVO( HSBColor.convertHSBtoRGB(random,.25,.9) );
+			}
+			
 		]]>
 	</fx:Script>
+	
+	<s:layout>
+		<s:HorizontalLayout />
+	</s:layout>
 	
 	<s:List id="theList"
 			width="372" height="400"
@@ -70,5 +100,16 @@
 			<!--<s:VerticalLayout rowHeight="15" />-->
 		</s:layout>
 	</s:List>
+	
+	<s:BorderContainer>
+		<s:layout>
+			<s:VerticalLayout />
+		</s:layout>
+		
+		<s:Button label="Add item" click="addItem()" />
+		<s:Button label="Add item at 0" click="addItemAt(0)" />
+		<s:Button label="Remove item at 0" click="removeItemAt(0)" />
+		<s:Button label="RemoveAll" click="removeAll()" />
+	</s:BorderContainer>
 	
 </s:Application>
