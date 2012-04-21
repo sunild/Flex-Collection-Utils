@@ -1,5 +1,3 @@
 Flex collection utils:
 - PagedArrayCollection - uses a filter function to paginate the data.
 - VectorList - IList implementation for a Vector
-
-This is not quite complete, just the initial commit...
